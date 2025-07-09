@@ -1,0 +1,4 @@
+Link que te lleva a excalidraw para observar la representacion grafica
+de una lista enlazada a nivel de memoria para tener un mayor entendimiento.
+
+https://excalidraw.com/#json=rPWw8QPnoir3TkXyaD917,rZX-vHdipcsuuFndgNPAig
