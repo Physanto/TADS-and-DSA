@@ -24,6 +24,7 @@ int removeLast(int *size, struct node **head);
 void showNodes(int size, struct node *head);
 struct node *get(int size, struct node *head, int index);
 void add(int position, int element, int *size, struct node **head);
+int removeIndex(int index, int *size, struct node **head);
 
 int main(){
     
@@ -34,10 +35,10 @@ int main(){
     struct node *head;
 
     addFirst(1, &size, &head);
-    //addFirst(2, &size, &head);
+    addFirst(2, &size, &head);
     addFirst(3, &size, &head);
-    //addFirst(4, &size, &head);
-    //addLast(5, &size, &head);
+    addFirst(4, &size, &head);
+    addLast(5, &size, &head);
     addLast(6, &size, &head);
     addLast(8, &size, &head);
     //removeLast(&size, &head);
@@ -49,8 +50,23 @@ int main(){
     printf("cantidad de nodos %d\n", size);
     showNodes(size, head);
 
-    add(2,10,&size,&head);
+    add(0,10,&size,&head);
+    add(1,11,&size,&head);
+    add(2,12,&size,&head);
+    add(3,13,&size,&head);
+    add(4,14,&size,&head);
+    add(5,15,&size,&head);
+
     printf("ELEMENTOS INGRESADOS DESPUES DEL ADD\n");
+    printf("cantidad de nodos %d\n", size);
+    showNodes(size, head);
+
+    removeIndex(0, &size, &head);
+    removeIndex(0, &size, &head);
+    removeIndex(0, &size, &head);
+    removeIndex(4, &size, &head);
+
+    printf("ELEMENTOS INGRESADOS DESPUES DEL REMOVE INDEX\n");
     printf("cantidad de nodos %d\n", size);
     showNodes(size, head);
 
@@ -64,12 +80,11 @@ void showNodes(int size, struct node *head){
     struct node *currentNode = head;
 
     int i = 0;
-
-    while(currentNode->nextNode != NULL){
-        printf("\nEste es el valor del nodo %d: %d",(++i),currentNode->element);
-        currentNode = currentNode->nextNode;
-    } 
-    printf("\nEste es el valor del nodo %d: %d\n",++i, currentNode->element);
+ 
+    for(int i = 0; i < size; i++){ 
+        printf("\nEste es el valor del nodo %d: %d", (i+1), get(size, head, i)->element);
+    }
+    printf("\n");
 }
 
 int size(int *size){
@@ -204,29 +219,64 @@ struct node *get(int size, struct node *head, int index){
 
 void add(int position, int element, int *size, struct node **head){
 
-    struct node *newNode = malloc(sizeof(struct node));
-
-    if(isEmpty(*size) == -1){
-        *head = newNode;
-        (*size)++;
-        return;
-    }
-
     if(position < 0 || position > *size){
         printf("Indice fuera de rango");
         return;
     }
 
+    struct node *newNode = malloc(sizeof(struct node));
+    newNode->element = element;
+    newNode->nextNode = NULL;
+
+    if(position == 0){ 
+        newNode->nextNode = *head;
+        *head = newNode;
+        (*size)++;
+        return;
+    }
+     
     struct node *node = get(*size, *head, position);
 
     struct node *currentNode = *head;
 
-    while(currentNode != node){
+    while(currentNode->nextNode != node){ 
         currentNode = currentNode->nextNode; 
     }
 
     currentNode->nextNode = newNode;
     newNode->nextNode = node;
     (*size)++;
+}
+
+int removeIndex(int index, int *size, struct node **head){
+
+    if(index < 0 || index >= *size) return -1;
+    
+    int elementEliminated;
+    struct node *nodeEliminated;
+
+    if(index == 0){ 
+        nodeEliminated = *head;
+        elementEliminated = nodeEliminated->element;
+        *head = nodeEliminated->nextNode;
+        free(nodeEliminated);
+        nodeEliminated = NULL;
+        (*size)--;
+        return elementEliminated;
+    }
+
+    nodeEliminated = get(*size,*head, index);
+    struct node *currentNode = *head;
+
+    while(currentNode->nextNode != nodeEliminated){
+        currentNode = currentNode->nextNode;
+    }
+
+    elementEliminated = nodeEliminated->element;
+    currentNode->nextNode = nodeEliminated->nextNode;
+    free(nodeEliminated);
+    nodeEliminated = NULL;
+    (*size)--;
+    return elementEliminated;
 }
 
