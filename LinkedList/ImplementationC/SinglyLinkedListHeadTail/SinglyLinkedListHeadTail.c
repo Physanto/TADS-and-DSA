@@ -13,10 +13,12 @@ struct node{
 int size(int size);
 signed char isEmpty(int size);
 void addFirst(int element, int *size, struct node **head, struct node **tail);
-void addLast(int element, int *size, struct node **head, struct node **tail);
 int removeFirst(int *size, struct node **head, struct node **tail);
-int removeLast(int *size, struct node **head, struct node **tail);
+void addLast(int element, int *size, struct node **head, struct node **tail);
+int removeLast(int *size, struct node **tail, struct node **head);
 void showNodes(int size, struct node *nodeRecovering);
+void createHeadTail(int *size, struct node **head, struct node **tail, struct node *newNode);
+
 
 int main(){
 
@@ -25,10 +27,23 @@ int main(){
     struct node *head = NULL;
     struct node *tail = NULL;
 
-    addLast(3, &size, &head, &tail);
-    addLast(4, &size, &head, &tail);
+    //addLast(3, &size, &head, &tail);
     addFirst(1, &size, &head, &tail);
     addFirst(2, &size, &head, &tail);
+    addFirst(3, &size, &head, &tail);
+    addLast(4, &size, &head, &tail);
+    addLast(5, &size, &head, &tail);
+    removeLast(&size, &tail, &head);
+    removeLast(&size, &tail, &head);
+    removeLast(&size, &tail, &head);
+    removeFirst(&size,&head,&tail);
+    removeFirst(&size,&head,&tail);
+    removeFirst(&size,&head,&tail);
+    removeLast(&size, &tail, &head);
+    addFirst(10, &size, &head, &tail);
+    addLast(6, &size, &head, &tail);
+    addLast(100, &size, &head, &tail);
+    addLast(51, &size, &head, &tail);
 
     printf("\nELEMENTOS ANNADIDOS\n");
     showNodes(size,head);
@@ -66,17 +81,30 @@ void addFirst(int element, int *size, struct node **head, struct node **tail){
     newNode->next = NULL;
 
     if(isEmpty(*size) == -1){  
-        *head = newNode;
-        *tail = *head;
-        (*size)++;
+        createHeadTail(size, head, tail, newNode); 
         return;
     }
 
     newNode->next = *head;
-    *tail = *head;
     *head = newNode;
     (*size)++;
-    return;
+}
+
+int removeFirst(int *size, struct node **head, struct node **tail){
+
+    if(isEmpty(*size)) return -1; 
+
+    struct node *nodeEliminated = *head;
+    int elementEliminated = nodeEliminated->element;
+
+    *head = nodeEliminated->next;
+
+    if(*head == NULL) *tail = NULL;
+    
+    free(nodeEliminated);
+    nodeEliminated = NULL;
+    (*size)--;
+    return elementEliminated;
 }
 
 void addLast(int element, int *size, struct node **head, struct node **tail){
@@ -86,14 +114,46 @@ void addLast(int element, int *size, struct node **head, struct node **tail){
     newNode->next = NULL;
 
     if(isEmpty(*size) == -1){ 
-        *head = newNode;
-        *tail = *head;
-        (*size)++;
+        createHeadTail(size, head, tail, newNode);
         return;
     } 
     
     (*tail)->next = newNode;
     *tail = newNode;
     (*size)++;
-    return;
+}
+
+int removeLast(int *size, struct node **tail, struct node **head){
+
+    if(isEmpty(*size)) return -1;
+
+    struct node *nodeEliminated = *tail;
+    int elementEliminated = nodeEliminated->element;
+
+    if(*head == *tail){
+        free(nodeEliminated);
+        *head = NULL;
+        *tail = NULL;
+        (*size)--;
+        return elementEliminated;
+    }
+
+    struct node *currentNode = *head;
+
+    while(currentNode->next != *tail){
+        currentNode = currentNode->next;    
+    }
+
+    currentNode->next = NULL;
+    *tail = currentNode;
+    free(nodeEliminated);
+    nodeEliminated = NULL;
+    (*size)--;
+    return elementEliminated;
+}
+
+void createHeadTail(int *size, struct node **head, struct node **tail, struct node *newNode){
+    *head = newNode;
+    *tail = newNode;
+    (*size)++;
 }
