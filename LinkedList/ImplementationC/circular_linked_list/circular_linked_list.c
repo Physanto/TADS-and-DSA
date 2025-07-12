@@ -55,6 +55,7 @@ void add_first(LinkedList *list, int element){
     if(is_empty(list)){
         list->head = new_node;
         list->tail = new_node;
+        list->tail->nextNode = list->head;
         list->size++;
         return;
     }
