@@ -2,6 +2,12 @@
 
 #define LINKED_LIST
 
+typedef enum{  
+    OK,
+    ERR_NULL_PTR,
+    ERR_INDEX_OUT_RANGE
+}status;
+
 typedef struct LinkedList LinkedList;
 
 // prototipo de funciones
@@ -12,11 +18,12 @@ typedef struct LinkedList LinkedList;
  * @return el puntero que apunta a la lista para la insercion de datos.
  */
 LinkedList *create_linked_list();
-void destroyed_linked_list(LinkedList **linked_list);
-int size_list(LinkedList *linked_list);
+//destruye la lista del heap
+status destroyed_linked_list(LinkedList **linked_list);
+status size_list(LinkedList *linked_list);
 bool is_empty(LinkedList *linked_list);
-void add_first(LinkedList *linked_list, void*);
-void *remove_first(LinkedList *linked_list);
+void add_first(LinkedList *linked_list, int element);
+int remove_first(LinkedList *linked_list);
 void add_last(LinkedList *linked_list, int element);
 int remove_last(LinkedList *linked_list); 
 void print_list(LinkedList *linked_list);

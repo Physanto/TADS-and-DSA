@@ -1,159 +1,276 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include "../utils/linked_list.h"
 
 // Estructuras de datos
 
-struct node{
+typedef struct Node{
     int element;
-    struct node *next;
-};
+    struct Node *next;
+}Node;
 
-// Prototipos de las funciones necesarias
+typedef struct LinkedList{
+    struct Node *head;
+    struct Node *tail;
+    int size;
+}LinkedList;
 
-int size(int size);
-signed char isEmpty(int size);
-void addFirst(int element, int *size, struct node **head, struct node **tail);
-int removeFirst(int *size, struct node **head, struct node **tail);
-void addLast(int element, int *size, struct node **head, struct node **tail);
-int removeLast(int *size, struct node **tail, struct node **head);
-void showNodes(int size, struct node *nodeRecovering);
-void createHeadTail(int *size, struct node **head, struct node **tail, struct node *newNode);
+void create_head_tail(LinkedList *list, Node *new_node);
+Node *get(LinkedList *list, int index);
 
 
-int main(){
+LinkedList *create_linked_list(){
 
-    int size = 0;
+    LinkedList *linked_list =malloc(sizeof(struct LinkedList));
+    linked_list->head = NULL;
+    linked_list->tail = NULL;
+    linked_list->size = 0;
 
-    struct node *head = NULL;
-    struct node *tail = NULL;
-
-    //addLast(3, &size, &head, &tail);
-    addFirst(1, &size, &head, &tail);
-    addFirst(2, &size, &head, &tail);
-    addFirst(3, &size, &head, &tail);
-    addLast(4, &size, &head, &tail);
-    addLast(5, &size, &head, &tail);
-    removeLast(&size, &tail, &head);
-    removeLast(&size, &tail, &head);
-    removeLast(&size, &tail, &head);
-    removeFirst(&size,&head,&tail);
-    removeFirst(&size,&head,&tail);
-    removeFirst(&size,&head,&tail);
-    removeLast(&size, &tail, &head);
-    addFirst(10, &size, &head, &tail);
-    addLast(6, &size, &head, &tail);
-    addLast(100, &size, &head, &tail);
-    addLast(51, &size, &head, &tail);
-
-    printf("\nELEMENTOS ANNADIDOS\n");
-    showNodes(size,head);
-
-    return 0;
+    return linked_list;
 }
 
-void showNodes(int size, struct node *nodeRecovering){ 
+status destroyed_linked_list(LinkedList **list){
+
+    if(list == NULL) return ERR_NULL_PTR;
+
+    Node *current_node = (*list)->head;
+
+    while(current_node != NULL){
+        Node *node_eliminated = current_node->next;
+        free(current_node);
+        current_node = node_eliminated->next;
+    }
+    (*list)->head = NULL;
+    (*list)->tail = NULL;
+    (*list)->size = 0;
+    free(*list);
+    *list = NULL;
+
+    return OK;
+}
+
+status size_list(LinkedList *list){
+
+    if(list == NULL) return ERR_NULL_PTR;
+    return list->size;
+}
+
+bool is_empty(LinkedList *list){
+    return list->size == 0 ? true : false;
+}
+
+void add_first(LinkedList *list, int element){
+
+    Node *new_node = malloc(sizeof(struct Node));
+    new_node->element = element;
+    new_node->next = NULL;
+
+    if(is_empty(list)){  
+        create_head_tail(list, new_node); 
+        return;
+    }
+
+    new_node->next = list->head;
+    list->head = new_node;
+    list->size++;
+}
+
+int remove_first(LinkedList *list){
+
+    if(is_empty(list)) return -1; 
+
+    Node *node_eliminated = list->head;
+    int element_eliminated = node_eliminated->element;
+
+    list->head = node_eliminated->next;
+
+    if(list->head == NULL) list->tail = NULL;
+    
+    free(node_eliminated);
+    node_eliminated = NULL;
+    list->size--;
+    return element_eliminated;
+}
+
+void add_last(LinkedList *list, int element){
+
+    Node *new_node = malloc(sizeof(struct Node));
+    new_node->element = element;
+    new_node->next = NULL;
+
+    if(is_empty(list)){ 
+        create_head_tail(list, new_node);
+        return;
+    } 
+    
+    list->tail->next = new_node;
+    list->tail = new_node;
+    list->size++;
+}
+
+int remove_last(LinkedList *list){
+
+    if(is_empty(list)) return -1;
+
+    Node *node_eliminated = list->tail;
+    int element_eliminated = node_eliminated->element;
+
+    if(list->head == list->tail){
+        free(node_eliminated);
+        node_eliminated = NULL;
+        list->size--;
+        return element_eliminated;
+    }
+
+    Node *current_node = list->head;
+
+    while(current_node->next != list->tail){
+        current_node = current_node->next;    
+    }
+
+    current_node->next = NULL;
+    list->tail = current_node;
+    free(node_eliminated);
+    node_eliminated = NULL;
+    list->size--;
+    return element_eliminated;
+}
+
+void print_list(LinkedList *list){
+
+    if(list == NULL){
+        printf("\nLa lista posiblemente ha sido liberada, no puedes ingresar datos\n");
+        return;
+    }
+
+    if(is_empty(list)){
+        printf("\nLa lista esta vacia, no hay nada que mostrar\n");
+        return;
+    }
 
     int i = 0;
-    
-    while(nodeRecovering != NULL){
-        /*if(i == 2){  
-            printf("\nEste es el nodo %d y la direccion de memoria es: %p", (++i),nodeRecovering);
-            continue;
-        }*/
-        printf("\nEste es el nodo %d y tiene un valor de: %d", (++i),nodeRecovering->element);
-        nodeRecovering = nodeRecovering->next;
+    struct Node *current_node = list->head; 
+
+    while(current_node != NULL){
+        printf("Nodo %d tiene el elemento: %d\n",(++i), current_node->element);
+        current_node = current_node->next;
     }
     printf("\n");
 }
 
-int size(int size){
-    return size;
-}
+void insert_at(LinkedList *list, int index, int element){
 
-signed char isEmpty(int size){
-    return size == 0 ? -1 : 0;
-}
+    if(index < 0 || index > list->size) return;
 
-void addFirst(int element, int *size, struct node **head, struct node **tail){
+    Node *new_node = malloc(sizeof(struct Node));
+    new_node->element = element;
+    new_node->next = NULL;
 
-    struct node *newNode = malloc(sizeof(struct node));
-    newNode->element = element;
-    newNode->next = NULL;
-
-    if(isEmpty(*size) == -1){  
-        createHeadTail(size, head, tail, newNode); 
+    if(is_empty(list)){
+        create_head_tail(list,new_node);
         return;
     }
 
-    newNode->next = *head;
-    *head = newNode;
-    (*size)++;
-}
-
-int removeFirst(int *size, struct node **head, struct node **tail){
-
-    if(isEmpty(*size)) return -1; 
-
-    struct node *nodeEliminated = *head;
-    int elementEliminated = nodeEliminated->element;
-
-    *head = nodeEliminated->next;
-
-    if(*head == NULL) *tail = NULL;
-    
-    free(nodeEliminated);
-    nodeEliminated = NULL;
-    (*size)--;
-    return elementEliminated;
-}
-
-void addLast(int element, int *size, struct node **head, struct node **tail){
-
-    struct node *newNode = malloc(sizeof(struct node));
-    newNode->element = element;
-    newNode->next = NULL;
-
-    if(isEmpty(*size) == -1){ 
-        createHeadTail(size, head, tail, newNode);
+    if(index == 0){ 
+        new_node->next = list->head;
+        list->head = new_node;
+        list->size++;
         return;
+    }
+
+    if(index == list->size){
+        list->tail->next = new_node;
+        list->tail = new_node;
+        list->size++;
+        return;
+    }
+
+    Node *node_find = get(list, index-1);
+    Node *node_aux = node_find->next;
+    node_find->next = new_node; 
+    new_node->next = node_aux;
+    list->size++;
+}
+
+int remove_at(LinkedList *list, int index){
+
+    if(index < 0 || index > list->size) return -1;
+
+    if(is_empty(list)) return -1;
+
+    Node *node_eliminated = list->head;
+    int element_eliminated;
+    
+    if(list->size == 1){ 
+        element_eliminated = node_eliminated->element;
+        free(node_eliminated); 
+        list->head = NULL;
+        list->tail = NULL;
+        list->size = 0;
+        return element_eliminated;
+    }
+
+    if(index == 0){ 
+        element_eliminated = node_eliminated->element;
+
+        list->head = node_eliminated->next;
+
+        free(node_eliminated);
+        node_eliminated = NULL;
+
+        list->size--;
+        return element_eliminated;
     } 
-    
-    (*tail)->next = newNode;
-    *tail = newNode;
-    (*size)++;
+
+    Node *node_prev_find = get(list, index-1);
+
+    node_eliminated = node_prev_find->next;
+    element_eliminated = node_eliminated->element;
+
+    node_prev_find->next = node_eliminated->next;
+
+    if(index == list->size-1) list->tail = node_prev_find;
+
+    free(node_eliminated);
+    node_eliminated = NULL;
+    list->size--;
+
+    return element_eliminated;
 }
 
-int removeLast(int *size, struct node **tail, struct node **head){
+int get_first(LinkedList *list){
+    return list->head->element;
+}
 
-    if(isEmpty(*size)) return -1;
+int get_last(LinkedList *list){
+    return list->tail->element;
+}
 
-    struct node *nodeEliminated = *tail;
-    int elementEliminated = nodeEliminated->element;
+int get_at(LinkedList *list, int index){
+    return get(list, index)->element;
+}
 
-    if(*head == *tail){
-        free(nodeEliminated);
-        *head = NULL;
-        *tail = NULL;
-        (*size)--;
-        return elementEliminated;
+
+Node *get(LinkedList *list, int index){
+
+    if(index < 0 || index >= list->size) return NULL;
+
+    Node *node_find = list->head;
+
+    for(int i = 0; i < list->size; i++){
+
+        if(i == index){
+            return node_find;
+        }
+        node_find = node_find->next;
     }
-
-    struct node *currentNode = *head;
-
-    while(currentNode->next != *tail){
-        currentNode = currentNode->next;    
-    }
-
-    currentNode->next = NULL;
-    *tail = currentNode;
-    free(nodeEliminated);
-    nodeEliminated = NULL;
-    (*size)--;
-    return elementEliminated;
+    return NULL;
 }
 
-void createHeadTail(int *size, struct node **head, struct node **tail, struct node *newNode){
-    *head = newNode;
-    *tail = newNode;
-    (*size)++;
+void create_head_tail(LinkedList *list, Node *new_node){
+    list->head = new_node;
+    list->tail = new_node; //
+    list->size++;
 }
+
