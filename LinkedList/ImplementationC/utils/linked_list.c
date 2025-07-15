@@ -80,7 +80,6 @@ status destroy_linked_list(LinkedList **list){
             *list = NULL; 
             return OK;
         }
-
         default:
             return ERR_UKNOW_TYPE_LIST;
     }
@@ -112,9 +111,7 @@ int size_list(LinkedList *list){
 }
 
 bool is_empty(LinkedList *list){
-    if(list == NULL) {
-        return true;
-    }
+    if(list == NULL) return true;
     return list->size == 0 ? true : false;
 }
 
