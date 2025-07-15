@@ -3,214 +3,154 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../utils/linked_list.h"
+#include "../utils/linked_list.c"
 
+status add_first(LinkedList *list, int element){
 
-typedef struct Node{
-    int element;
-    struct Node *next_node;
-    struct Node *prev_node;
-}Node;
+    if(list == NULL) return ERR_NULL_PTR;
 
-typedef struct LinkedList{
-    struct Node *head;
-    struct Node *tail;
-    int size;
-}LinkedList;
+    if(list->type != LIST_DOUBLY) return ERR_UKNOW_TYPE_LIST;
 
-Node *get(LinkedList *, int);
-
-LinkedList *create_linked_list(){
-    
-    LinkedList *list = malloc(sizeof(struct LinkedList));
-    list->head = NULL;
-    list->tail = NULL;
-    list->size = 0;
-
-    return list;
-}
-
-void destroyed_linked_list(LinkedList **list){
-
-    if (list == NULL || *list == NULL) return;
-
-    Node *current_node = (*list)->head; 
-
-    while(current_node != NULL){ 
-
-        Node *node_eliminated = current_node;
-        current_node = current_node->next_node;
-
-        free(node_eliminated);
-    }
-    free(*list);
-    *list = NULL;
-}
-
-int size_list(LinkedList *list){
-    return list->size;
-}
-
-bool is_empty(LinkedList *list){
-    return list->size == 0 ? true : false;
-}
-
-void add_first(LinkedList *list, int element){
-
-    Node *new_node = malloc(sizeof(struct Node));
-    new_node->element = element;
-    new_node->next_node = NULL;
-    new_node->prev_node = NULL;
+    Node *new_node = create_node(list, element);
+    if(new_node == NULL) return ERR_MEM_ALLOC;
 
     if(is_empty(list)){ 
-        list->head = new_node;
-        list->tail = new_node;
-        list->size++;
-        return;
+        create_head_tail(list,new_node);
+        return OK;
     }
-    list->head->prev_node = new_node;
-    new_node->next_node = list->head;
+    list->head->prev = new_node;
+    new_node->next = list->head;
     list->head = new_node;
     list->size++;
+    
+    return OK;
 }
 
-int remove_first(LinkedList *list){
+status remove_first(LinkedList *list, int *element_eliminated){
 
-    if(is_empty(list)) return -1;
+    if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
+
+    if(list->type != LIST_DOUBLY) return ERR_UKNOW_TYPE_LIST;
+
+    if(is_empty(list)) return ERR_LIST_EMPTY;
 
     Node *node_eliminated = list->head;
-    int element_eliminated = node_eliminated->element; 
+    *element_eliminated = node_eliminated->element; 
 
     if(list->size == 1){ 
         free(node_eliminated);
         list->head = NULL;
         list->tail = NULL;
         list->size--;
-        return element_eliminated;
+
+        return OK;
     }
 
-    Node *node_next = list->head->next_node;
-    node_next->prev_node = NULL;
+    Node *node_next = list->head->next;
+    node_next->prev = NULL;
     list->head = node_next;
 
     free(node_eliminated);
     list->size--;
-    return element_eliminated;
+
+    return OK;
 }
 
-void add_last(LinkedList *list, int element){ 
+status add_last(LinkedList *list, int element){ 
 
-    Node *new_node = malloc(sizeof(struct Node));
-    new_node->element = element;
-    new_node->next_node = NULL;
-    new_node->prev_node = NULL;
+    if(list == NULL) return ERR_NULL_PTR;
+
+    if(list->type != LIST_DOUBLY) return ERR_UKNOW_TYPE_LIST;
+
+    Node *new_node = create_node(list, element);
+    if(new_node == NULL) return ERR_MEM_ALLOC;
 
     if(is_empty(list)){ 
-        list->head = new_node;
-        list->tail = new_node;
-        list->size++;
-        return;
+        create_head_tail(list, new_node);
+        return OK;
     }
 
-    list->tail->next_node = new_node;
-    new_node->prev_node = list->tail;
+    list->tail->next = new_node;
+    new_node->prev = list->tail;
     list->tail = new_node;
     list->size++;
+    
+    return OK;
 }
 
-int remove_last(LinkedList *list){
+status remove_last(LinkedList *list, int *element_eliminated){
 
-    if(is_empty(list)) return -1;
+    if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
+
+    if(list->type != LIST_DOUBLY) return ERR_UKNOW_TYPE_LIST;
+
+    if(is_empty(list)) return ERR_LIST_EMPTY;
 
     Node *node_eliminated = list->tail;
-    int element_eliminated = node_eliminated->element;
+    *element_eliminated = node_eliminated->element;
 
     if(list->size == 1){
         free(node_eliminated);
         list->head = NULL;
         list->tail = NULL;
         list->size--;
-        return element_eliminated;
+        return OK;
     }
 
-    Node *node_before = list->tail->prev_node;
-    node_before->next_node = NULL;
+    Node *node_before = list->tail->prev;
+    node_before->next = NULL;
     list->tail = node_before;
 
     free(node_eliminated);
     list->size--;
-    return element_eliminated;
+
+    return OK;
 }
 
-Node *get(LinkedList *list, int index){
+status insert_at(LinkedList *list, int index, int element){
 
-    if(index < 0 || index >= list->size) return NULL;
+    if(list == NULL) return ERR_NULL_PTR;
 
-    Node *node_find = list->head;
+    if(list->type != LIST_DOUBLY) return ERR_UKNOW_TYPE_LIST;
 
-    for(int i = 0; i < list->size; i++){ 
+    if(index < 0 || index > list->size) return ERR_INDEX_OUT_RANGE;
 
-        if(i == index){        
-            return node_find;
-        }
-        node_find = node_find->next_node;
-    }
-    return NULL;
-}
+    Node *new_node = create_node(list,element);
+    if(new_node == NULL) return ERR_MEM_ALLOC;
 
-int get_at(LinkedList *list, int index){
-    return get(list,index)->element;
-}
+    if(is_empty(list)){  
+        create_head_tail(list,new_node);
+        return OK;
+    } 
 
-int get_first(LinkedList *list){
-    return list->head->element;
-}
+    if(index == 0){ 
+        new_node->next = list->head;
+        list->head->prev = new_node;
+        list->head = new_node;
+        list->size++;
 
-int get_last(LinkedList *list){
-    return list->tail->element;
-}
-
-void insert_at(LinkedList *list, int index, int element){
-
-    if(index < 0 || index > list->size){
-        return;
+        return OK;
     }
 
-    Node *new_node = malloc(sizeof(struct Node));
-    new_node->element = element;
-    new_node->next_node = NULL;
-    new_node->prev_node = NULL;
+    if(index == list->size){
+        list->tail->next = new_node;
+        new_node->prev = list->tail;
+        list->tail = new_node;
+        list->size++;
 
+        return OK;
+    }
     // node_find es el nodo en la ubicacion donde se va insertar el nuevo
     Node *node_find = get(list,index);
+    if(node_find == NULL) return ERR_INDEX_OUT_RANGE;
 
     //node_before es el nodo anterior al node_find ya que el nodo anterior al encontrado debe apuntar al nuevo nodo.
-    Node *node_before = node_find->prev_node;
+    Node *node_before = node_find->prev;
 
-    node_before->next_node = new_node;
-    new_node->prev_node = node_find->prev_node;
-    node_find->prev_node = new_node;
-    new_node->next_node = node_find;
+    node_before->next = new_node;
+    new_node->prev = node_before;
+    new_node->next = node_find;
     list->size++;
-}
 
-void print_list(LinkedList *list){
-
-    if(list == NULL){
-        printf("\n La lista posiblemente ha sido liberada, no puedes ingresar datos\n");
-        return;
-    }
-
-    if(is_empty(list)){
-        printf("\nLa lista esta vacia, no hay nada que mostrar\n");
-        return;
-    }
-
-    int i = 0;
-    struct Node *current_node = list->head; 
-
-    while(current_node != NULL){
-        printf("Nodo %d tiene el elemento: %d\n",(++i), current_node->element);
-        current_node = current_node->next_node;
-    }
-    printf("\n");
+    return OK;
 }

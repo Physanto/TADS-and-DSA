@@ -7,19 +7,10 @@
 #define N 1000000  // cantidad de elementos para probar
 
 int main() {
-    LinkedList *list = create_linked_list();
+    LinkedList *listt = create_linked_list(LIST_CIRCULAR);
+    add_first(listt, 10);   // 10
+    add_first(listt, 20);   // 20 -> 10
+    add_first(listt, 30);   // 30 -> 20 -> 10
 
-    clock_t start = clock();
-
-    for (int i = 0; i < N; i++) {
-        add_last(list, i);
-    }
-
-    clock_t end = clock();
-    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-
-    printf("Insertar %d elementos tomó %.4f segundos.\n", N, seconds);
-
-    destroyed_linked_list(&list);
-    return 0;
+    print_list(listt);    return 0;
 }

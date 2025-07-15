@@ -6,18 +6,16 @@
 
 
 //Prototipo de Funciones
-
 void insert_head_tail(LinkedList *list, Node *new_node);
 
 status add_first(LinkedList *list, int element){ 
 
     if(list == NULL) return ERR_NULL_PTR;
 
+    if(list->type != LIST_CIRCULAR) return ERR_UKNOW_TYPE_LIST;
+
     Node *new_node = create_node(list,element);
     if(new_node == NULL) return ERR_MEM_ALLOC;
-
-    new_node->element = element;
-    new_node->next = NULL;
 
     if(is_empty(list)){
         insert_head_tail(list,new_node); 
@@ -35,6 +33,8 @@ status add_first(LinkedList *list, int element){
 status remove_first(LinkedList *list, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
+
+    if(list->type != LIST_CIRCULAR) return ERR_UKNOW_TYPE_LIST;
 
     if(is_empty(list)) return ERR_LIST_EMPTY; 
 
@@ -62,6 +62,8 @@ status add_last(LinkedList *list, int element){
     
     if(list == NULL) return ERR_NULL_PTR;
 
+    if(list->type != LIST_CIRCULAR) return ERR_UKNOW_TYPE_LIST;
+
     Node *new_node = create_node(list,element);
     if(new_node == NULL) return ERR_MEM_ALLOC;
 
@@ -84,6 +86,8 @@ status add_last(LinkedList *list, int element){
 status remove_last(LinkedList *list, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
+
+    if(list->type != LIST_CIRCULAR) return ERR_UKNOW_TYPE_LIST;
 
     if(is_empty(list)) return ERR_LIST_EMPTY; 
     
@@ -113,35 +117,16 @@ status remove_last(LinkedList *list, int *element_eliminated){
     return OK;
 }
 
-status print_list_circular(LinkedList *list){ 
-
-    if(list == NULL) return ERR_NULL_PTR;
-
-    if(is_empty(list)) return ERR_LIST_EMPTY;
-
-    int i = 0;
-    struct Node *current_node = list->head; 
-
-    while(current_node->next != list->head){
-        printf("Nodo %d tiene el elemento: %d\n",(++i), current_node->element);
-        current_node = current_node->next;
-    }
-    printf("Nodo %d tiene el elemento: %d\n",(++i), current_node->element);
-
-    return OK;
-}
-
 status insert_at(LinkedList *list, int index, int element){
 
     if(list == NULL) return ERR_NULL_PTR;
+
+    if(list->type != LIST_CIRCULAR) return ERR_UKNOW_TYPE_LIST;
 
     if(index < 0 || index > list->size) return ERR_INDEX_OUT_RANGE;
 
     Node *new_node = create_node(list,element);
     if(new_node == NULL) return ERR_MEM_ALLOC;
-
-    new_node->element = element;
-    new_node->next = NULL;
 
     if(is_empty(list)){  
         insert_head_tail(list,new_node);
@@ -157,7 +142,6 @@ status insert_at(LinkedList *list, int index, int element){
     }
 
     Node *node_find = get(list, index-1);
-
     if(node_find == NULL) return ERR_INDEX_OUT_RANGE;
 
     new_node->next = node_find->next;
@@ -175,6 +159,8 @@ status insert_at(LinkedList *list, int index, int element){
 status remove_at(LinkedList *list, int index, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
+
+    if(list->type != LIST_CIRCULAR) return ERR_UKNOW_TYPE_LIST;
 
     if(is_empty(list)) return ERR_LIST_EMPTY;
     
