@@ -5,7 +5,9 @@
 typedef enum{  
     OK,
     ERR_NULL_PTR,
-    ERR_INDEX_OUT_RANGE
+    ERR_INDEX_OUT_RANGE,
+    ERR_LIST_EMPTY,
+    ERR_MEM_ALLOC
 }status;
 
 typedef struct LinkedList LinkedList;
@@ -19,18 +21,19 @@ typedef struct LinkedList LinkedList;
  */
 LinkedList *create_linked_list();
 //destruye la lista del heap
-status destroyed_linked_list(LinkedList **linked_list);
-status size_list(LinkedList *linked_list);
+status destroy_linked_list(LinkedList **linked_list);
+int size_list(LinkedList *linked_list);
 bool is_empty(LinkedList *linked_list);
-void add_first(LinkedList *linked_list, int element);
-int remove_first(LinkedList *linked_list);
-void add_last(LinkedList *linked_list, int element);
-int remove_last(LinkedList *linked_list); 
-void print_list(LinkedList *linked_list);
-void insert_at(LinkedList *linked_list, int index, int element);
-int remove_at(LinkedList *linked_list, int index);
-int get_first(LinkedList *linked_list);
-int get_last(LinkedList *linked_list);
-int get_at(LinkedList *linked_list, int index);
+status add_first(LinkedList *linked_list, int element);
+status remove_first(LinkedList *linked_list, int *element_eliminated);
+status add_last(LinkedList *linked_list, int element);
+status remove_last(LinkedList *linked_list, int *element_eliminated); 
+status print_list(LinkedList *linked_list);
+status print_list_circular(LinkedList *linked_list);
+status insert_at(LinkedList *linked_list, int index, int element);
+status remove_at(LinkedList *linked_list, int index, int *element_eliminated);
+status get_first(LinkedList *linked_list, int *first_element);
+status get_last(LinkedList *linked_list, int *last_element);
+status get_at(LinkedList *linked_list, int index, int *element_at);
 
 #endif
