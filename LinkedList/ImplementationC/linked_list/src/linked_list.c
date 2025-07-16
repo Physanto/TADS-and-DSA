@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "../utils/linked_list.h"
+#include "../include/linked_list.h"
 
 // por simplicidad se va manejar una estructura general de nodo, esta
 // comparte los campos entre lista simple, circular y doblemente enlazada.
