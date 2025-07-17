@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../include/linked_list.h"
-#include "../src/linked_list.c"
+#include "./linked_list_internal.h"
 
 //Prototipo de Funciones
 void insert_head_tail(LinkedList *list, Node *new_node);

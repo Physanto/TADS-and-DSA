@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../include/linked_list.h"
-#include "../src/linked_list.c"
+#include "./linked_list_internal.h"
 
 status add_first(LinkedList *list, int element){
 
