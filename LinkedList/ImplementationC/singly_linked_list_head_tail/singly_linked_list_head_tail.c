@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "../utils/linked_list.h"
-#include "../utils/linked_list.c"
+#include "../utils/linked_list_internal.h"
 
-
-status add_first(LinkedList *list, int element){
+status add_first_singly(LinkedList *list, int element){
     
     if(list == NULL) return ERR_NULL_PTR;
 
@@ -26,7 +24,7 @@ status add_first(LinkedList *list, int element){
     return OK;
 }
 
-status remove_first(LinkedList *list, int *element_eliminated){
+status remove_first_singly(LinkedList *list, int *element_eliminated){
     
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
 
@@ -47,7 +45,7 @@ status remove_first(LinkedList *list, int *element_eliminated){
     return OK;
 }
 
-status add_last(LinkedList *list, int element){
+status add_last_singly(LinkedList *list, int element){
 
     if(list == NULL) return ERR_NULL_PTR;
 
@@ -71,7 +69,7 @@ status add_last(LinkedList *list, int element){
     return OK;
 }
 
-status remove_last(LinkedList *list, int *element_eliminated){
+status remove_last_singly(LinkedList *list, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
 
@@ -104,7 +102,7 @@ status remove_last(LinkedList *list, int *element_eliminated){
     return OK;
 }
 
-status insert_at(LinkedList *list, int index, int element){
+status insert_at_singly(LinkedList *list, int index, int element){
 
     if(list == NULL) return ERR_NULL_PTR;
 
@@ -144,7 +142,7 @@ status insert_at(LinkedList *list, int index, int element){
     return OK;
 }
 
-status remove_at(LinkedList *list, int index, int *element_eliminated){
+status remove_at_singly(LinkedList *list, int index, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
 

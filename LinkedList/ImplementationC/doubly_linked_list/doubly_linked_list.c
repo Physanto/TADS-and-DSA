@@ -5,7 +5,7 @@
 #include "../utils/linked_list.h"
 #include "../utils/linked_list.c"
 
-status add_first(LinkedList *list, int element){
+status add_first_doubly(LinkedList *list, int element){
 
     if(list == NULL) return ERR_NULL_PTR;
 
@@ -26,7 +26,7 @@ status add_first(LinkedList *list, int element){
     return OK;
 }
 
-status remove_first(LinkedList *list, int *element_eliminated){
+status remove_first_doubly(LinkedList *list, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
 
@@ -56,7 +56,7 @@ status remove_first(LinkedList *list, int *element_eliminated){
     return OK;
 }
 
-status add_last(LinkedList *list, int element){ 
+status add_last_doubly(LinkedList *list, int element){ 
 
     if(list == NULL) return ERR_NULL_PTR;
 
@@ -78,7 +78,7 @@ status add_last(LinkedList *list, int element){
     return OK;
 }
 
-status remove_last(LinkedList *list, int *element_eliminated){
+status remove_last_doubly(LinkedList *list, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
 
@@ -107,7 +107,7 @@ status remove_last(LinkedList *list, int *element_eliminated){
     return OK;
 }
 
-status insert_at(LinkedList *list, int index, int element){
+status insert_at_doubly(LinkedList *list, int index, int element){
 
     if(list == NULL) return ERR_NULL_PTR;
 

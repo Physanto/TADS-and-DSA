@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "./linked_list_internal.h"
+#include "../internal/linked_list_internal.h"
 
 // TODO: realizar el refactoring de tener estructuras para las diferentes tipos de listas esto con el fin de una mayor eficiencia y para el ingreso de datos en masa.
 
@@ -16,6 +16,126 @@ LinkedList *create_linked_list(TypeList listType){
     new_linked_list->type = listType;
 
     return new_linked_list; 
+}
+
+status add_first(LinkedList *list, int element){ 
+
+    if(list == NULL) return ERR_NULL_PTR;
+
+    switch(list->type){
+        
+        case LIST_SINGLY:
+            return add_first_singly(list, element);
+
+        case LIST_CIRCULAR:
+            return add_first_circular(list, element);
+
+        case LIST_DOUBLY:
+            return add_first_doubly(list, element);
+
+        default:
+            return ERR_UKNOW_TYPE_LIST;
+    }
+}
+
+status remove_first(LinkedList *list, int *element_eliminated){
+
+    if(list == NULL) return ERR_NULL_PTR;
+
+    switch(list->type){
+        
+        case LIST_SINGLY:
+            return remove_first_singly(list, element_eliminated);
+
+        case LIST_CIRCULAR:
+            return remove_first_circular(list, element_eliminated);
+
+        case LIST_DOUBLY:
+            return remove_first_doubly(list, element_eliminated);
+
+        default:
+            return ERR_UKNOW_TYPE_LIST;
+    }
+}
+
+status add_last(LinkedList *list, int element){ 
+
+    if(list == NULL) return ERR_NULL_PTR;
+
+    switch(list->type){
+        
+        case LIST_SINGLY:
+            return add_last_singly(list, element);
+
+        case LIST_CIRCULAR:
+            return add_last_circular(list, element);
+
+        case LIST_DOUBLY:
+            return add_last_doubly(list, element);
+
+        default:
+            return ERR_UKNOW_TYPE_LIST;
+    }
+}
+
+status remove_last(LinkedList *list, int *element_eliminated){ 
+
+    if(list == NULL) return ERR_NULL_PTR;
+
+    switch(list->type){
+        
+        case LIST_SINGLY:
+            return remove_last_singly(list, element_eliminated);
+
+        case LIST_CIRCULAR:
+            return remove_last_circular(list, element_eliminated);
+
+        case LIST_DOUBLY:
+            return remove_last_doubly(list, element_eliminated);
+
+        default:
+            return ERR_UKNOW_TYPE_LIST;
+    }
+}
+
+status remove_at(LinkedList *list, int index, int *element_eliminated){ 
+
+    if(list == NULL) return ERR_NULL_PTR;
+
+    switch(list->type){
+        
+        case LIST_SINGLY:
+            return remove_at_singly(list, index, element_eliminated);
+
+        case LIST_CIRCULAR:
+            return remove_at_circular(list, index, element_eliminated);
+
+        case LIST_DOUBLY:
+            //return remove_at_doubly(list, index, element_eliminated);
+
+        default:
+            return ERR_UKNOW_TYPE_LIST;
+    }
+}
+
+status insert_at(LinkedList *list, int index, int element){ 
+
+    if(list == NULL) return ERR_NULL_PTR;
+
+    switch(list->type){
+        
+        case LIST_SINGLY:
+            return insert_at_singly(list, index, element);
+
+        case LIST_CIRCULAR:
+            return insert_at_circular(list, index, element);
+
+        case LIST_DOUBLY:
+            return insert_at_doubly(list, index, element);
+
+        default:
+            return ERR_UKNOW_TYPE_LIST;
+    }
 }
 
 status destroy_linked_list(LinkedList **list){

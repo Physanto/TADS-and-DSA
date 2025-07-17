@@ -1,12 +1,12 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "../include/linked_list.h"
-#include "./linked_list_internal.h"
+#include "../internal/linked_list_internal.h"
 
 //Prototipo de Funciones
 void insert_head_tail(LinkedList *list, Node *new_node);
 
-status add_first(LinkedList *list, int element){ 
+status add_first_circular(LinkedList *list, int element){ 
 
     if(list == NULL) return ERR_NULL_PTR;
 
@@ -28,7 +28,7 @@ status add_first(LinkedList *list, int element){
     return OK;
 }
 
-status remove_first(LinkedList *list, int *element_eliminated){
+status remove_first_circular(LinkedList *list, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
 
@@ -56,7 +56,7 @@ status remove_first(LinkedList *list, int *element_eliminated){
     return OK;
 }
 
-status add_last(LinkedList *list, int element){ 
+status add_last_circular(LinkedList *list, int element){ 
     
     if(list == NULL) return ERR_NULL_PTR;
 
@@ -81,7 +81,7 @@ status add_last(LinkedList *list, int element){
     return OK;
 }
 
-status remove_last(LinkedList *list, int *element_eliminated){
+status remove_last_circular(LinkedList *list, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
 
@@ -115,7 +115,7 @@ status remove_last(LinkedList *list, int *element_eliminated){
     return OK;
 }
 
-status insert_at(LinkedList *list, int index, int element){
+status insert_at_circular(LinkedList *list, int index, int element){
 
     if(list == NULL) return ERR_NULL_PTR;
 
@@ -154,7 +154,7 @@ status insert_at(LinkedList *list, int index, int element){
     return OK;
 }
 
-status remove_at(LinkedList *list, int index, int *element_eliminated){
+status remove_at_circular(LinkedList *list, int index, int *element_eliminated){
 
     if(list == NULL || element_eliminated == NULL) return ERR_NULL_PTR;
 
