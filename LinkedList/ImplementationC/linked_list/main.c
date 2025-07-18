@@ -9,6 +9,22 @@ int main() {
 
     add_first(singly, 1);
     add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
+    add_first(singly, 2);
     print_list(singly);
 
     add_first(circular, 3);

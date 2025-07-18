@@ -278,27 +278,29 @@ status print_linked_list(LinkedList *list){
 
     if(is_empty(list)) return ERR_LIST_EMPTY;
 
-    int i = 0;
     Node *current_node = list->head; 
 
     while(current_node != NULL){
-        printf("Nodo %d tiene el elemento: %d\n",(++i), current_node->element);
+        printf("[%d]->",current_node->element);
         current_node = current_node->next;
     }
-    printf("\n");
+    printf("NULL\n");
 
     return OK;
 }
 
 status print_circular_list(LinkedList *list){ 
 
-    int i = 1;
     Node *current_node = list->head;
 
     do {
-        printf("Nodo %d tiene el elemento: %d\n", i++, current_node->element);
+
+        printf("[%d]->",current_node->element);
         current_node = current_node->next;
+
     } while(current_node != list->head);
+
+    printf("NULL\n");
 
     return OK;
 }
