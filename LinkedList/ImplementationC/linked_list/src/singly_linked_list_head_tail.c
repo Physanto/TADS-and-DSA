@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../internal/linked_list_internal.h"
@@ -90,7 +89,7 @@ status remove_last_singly(LinkedList *list, int *element_eliminated){
 
     Node *current_node = get(list, list->size-2);
 
-    if(current_node == NULL) return ERR_INDEX_OUT_RANGE;
+    if(current_node == NULL) return ERR_NULL_PTR;
 
     current_node->next = NULL;
     list->tail = current_node;
@@ -130,7 +129,7 @@ status insert_at_singly(LinkedList *list, int index, int element){
     }
 
     Node *node_find = get(list, index-1);
-    if(node_find == NULL) return ERR_INDEX_OUT_RANGE;
+    if(node_find == NULL) return ERR_NULL_PTR;
 
     new_node->next = node_find->next;
     node_find->next = new_node; 
@@ -179,7 +178,7 @@ status remove_at_singly(LinkedList *list, int index, int *element_eliminated){
 
     Node *node_prev_find = get(list, index-1);
 
-    if(node_prev_find == NULL) return ERR_INDEX_OUT_RANGE;
+    if(node_prev_find == NULL) return ERR_NULL_PTR;
 
     node_eliminated = node_prev_find->next;
     *element_eliminated = node_eliminated->element;

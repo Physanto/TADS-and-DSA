@@ -1,5 +1,3 @@
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../internal/linked_list_internal.h"
@@ -141,7 +139,7 @@ status insert_at_doubly(LinkedList *list, int index, int element){
     }
     // node_find es el nodo en la ubicacion donde se va insertar el nuevo
     Node *node_find = get(list,index);
-    if(node_find == NULL) return ERR_INDEX_OUT_RANGE;
+    if(node_find == NULL) return ERR_NULL_PTR;
 
     //node_before es el nodo anterior al node_find ya que el nodo anterior al encontrado debe apuntar al nuevo nodo.
     Node *node_before = node_find->prev;
@@ -150,6 +148,61 @@ status insert_at_doubly(LinkedList *list, int index, int element){
     new_node->prev = node_before;
     new_node->next = node_find;
     list->size++;
+
+    return OK;
+}
+
+status remove_at_doubly(LinkedList *list, int index, int *element_eliminated){
+
+    if(list == NULL) return ERR_NULL_PTR;
+
+    if(list->type != LIST_DOUBLY) return ERR_UKNOW_TYPE_LIST;
+
+    if(is_empty(list)) return ERR_LIST_EMPTY;
+
+    if(index < 0 || index >= list->size) return ERR_INDEX_OUT_RANGE;
+
+    Node *node_eliminated;
+
+    if(list->size == 1 && index == 0){
+        node_eliminated = list->head;
+        *element_eliminated = node_eliminated->element;
+
+        free(node_eliminated);
+        list->head = NULL;
+        list->tail = NULL;
+        list->size--;
+
+        return OK;
+    }
+
+    if(index == 0){ 
+        node_eliminated = list->head;
+        *element_eliminated = node_eliminated->element;
+
+        list->head = node_eliminated->next;
+        list->head->prev = NULL;
+
+        free(node_eliminated);
+        list->size--;
+
+        return OK;
+    } 
+
+    Node *node_prev_find = get(list, index-1);
+    if(node_prev_find == NULL) return ERR_NULL_PTR; 
+
+    node_eliminated = node_prev_find->next;
+    *element_eliminated = node_eliminated->element;
+
+    node_prev_find->next = node_eliminated->next;
+
+    if(index == list->size-1) list->tail = node_prev_find;
+
+    else node_eliminated->next->prev = node_prev_find;
+
+    free(node_eliminated);
+    list->size--;
 
     return OK;
 }

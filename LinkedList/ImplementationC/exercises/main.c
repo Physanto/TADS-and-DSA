@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdbool.h>
 #include "./lib/lib_linked_list/include/linked_list.h"
 
@@ -6,16 +5,11 @@
 int main() {
     LinkedList *singly = create_linked_list(LIST_SINGLY);
     LinkedList *circular = create_linked_list(LIST_CIRCULAR);
+    LinkedList *doble = create_linked_list(LIST_DOUBLY);
 
     int a = 0;
     int *b = &a;
 
-    destroy_linked_list(&singly);
-
-    if(add_first(singly, 1) == OK){ 
-
-        printf("Por favor verifica que no estes pasando una lista NULL\n");
-    }
     add_first(singly, 1);
     add_first(singly, 2);
     add_first(singly, 3);
@@ -36,4 +30,15 @@ int main() {
     add_first(circular, 5);
     remove_first(circular, b);
     print_list(circular);
+    
+    add_first(doble, 1);
+    add_first(doble, 1);
+    add_first(doble, 2);
+    add_first(doble, 3);
+    add_last(doble, 10);
+    add_last(doble, 20);
+    add_first(doble, 4);
+    add_first(doble, 5);
+    remove_first(doble, b);
+    print_list(doble);
 }

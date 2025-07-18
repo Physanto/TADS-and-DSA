@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../internal/linked_list_internal.h"
@@ -104,7 +103,7 @@ status remove_last_circular(LinkedList *list, int *element_eliminated){
 
     Node *node_prev_find = get(list, list->size-2);
 
-    if(node_prev_find == NULL) return ERR_INDEX_OUT_RANGE;
+    if(node_prev_find == NULL) return ERR_NULL_PTR;
 
     list->tail = node_prev_find;
     list->tail->next = list->head;
@@ -140,7 +139,7 @@ status insert_at_circular(LinkedList *list, int index, int element){
     }
 
     Node *node_find = get(list, index-1);
-    if(node_find == NULL) return ERR_INDEX_OUT_RANGE;
+    if(node_find == NULL) return ERR_NULL_PTR;
 
     new_node->next = node_find->next;
     node_find->next = new_node;
@@ -193,7 +192,7 @@ status remove_at_circular(LinkedList *list, int index, int *element_eliminated){
 
     Node *node_prev_find = get(list, index-1);
 
-    if(node_prev_find == NULL) return ERR_INDEX_OUT_RANGE;
+    if(node_prev_find == NULL) return ERR_NULL_PTR;
 
     node_eliminated = node_prev_find->next;
     *element_eliminated = node_eliminated->element;

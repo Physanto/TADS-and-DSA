@@ -111,7 +111,7 @@ status remove_at(LinkedList *list, int index, int *element_eliminated){
             return remove_at_circular(list, index, element_eliminated);
 
         case LIST_DOUBLY:
-            //return remove_at_doubly(list, index, element_eliminated);
+            return remove_at_doubly(list, index, element_eliminated);
 
         default:
             return ERR_UKNOW_TYPE_LIST;

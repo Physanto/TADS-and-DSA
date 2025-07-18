@@ -39,7 +39,7 @@ status remove_last_doubly(LinkedList *list, int *element_eliminated);
 
 status remove_at_singly(LinkedList *list, int index, int *element_eliminated);
 status remove_at_circular(LinkedList *list, int index, int *element_eliminated);
-//status remove_at_doubly(LinkedList *list, int index, int *element_eliminated);
+status remove_at_doubly(LinkedList *list, int index, int *element_eliminated);
 
 status insert_at_singly(LinkedList *list, int index, int element);
 status insert_at_circular(LinkedList *list, int index, int element);
