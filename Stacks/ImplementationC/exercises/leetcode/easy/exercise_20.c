@@ -19,11 +19,11 @@
 // Salida: verdadero
 
 void push(char element, char *parentheses, int *position){
-    *(parentheses + *(++position)) = element;
+    *(parentheses + ++(*position)) = element;
 }
 
 char pop(char *parentheses, int *position){
-    return *(parentheses + *(position--));
+    return *(parentheses + (*position)--);
 }
 
 bool isValid(char* s){
@@ -44,37 +44,42 @@ bool isValid(char* s){
             continue;
         }
         element_poped = pop(parentheses, &position);
+        printf("pushed: %c , poped: %c\n",element_pushed, element_poped);
 
-        switch(element_pushed){
-            
+        switch(element_pushed){ 
+
             case ')':
-                if((element_pushed - 1) == element_poped) {
-                    printf("pushed: %c , poped: %c",element_pushed, element_poped);
+                if(element_poped == '(') {
+                    printf("pushed: %c , poped: %c\n",element_pushed, element_poped);
                     continue;
                 }
+                break;
 
             case ']':
-                if((element_pushed - 2) == element_poped) {
-                    printf("pushed: %c , poped: %c",element_pushed, element_poped);
+                if(element_poped == '[') {
+                    printf("pushed: %c , poped: %c\n",element_pushed, element_poped);
                     continue;
                 }
+                break;
 
             case '}':
-                if((element_pushed - 2) == element_poped){
-                    printf("pushed: %c , poped: %c",element_pushed, element_poped);
+                if(element_poped == '{') {
+                    printf("pushed: %c , poped: %c\n",element_pushed, element_poped);
                     continue;
                 }
+                break;
+
             default:
                 return false;
         }
-
     }
+    if(position != -1) return false;
     return true;
 }
 
 int main(){
     
-    char *s = {"([])"};
+    char *s = "([)]";
 
     if(isValid(s)){
         printf("es correcto\n");
